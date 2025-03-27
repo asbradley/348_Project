@@ -24,7 +24,10 @@ def manage_coaches():
 
 @app.route('/teams')
 def manage_teams():
-    return render_template('teams/manage_teams.html')
+    
+    # Get all teams
+    teams = Team.query.all()
+    return render_template('teams/manage_teams.html', teams=teams)
 
 
 
@@ -98,6 +101,7 @@ def add_athlete():
 def edit_athlete(athlete_id):
     athlete = Athlete.query.get_or_404(athlete_id)
 
+
     if request.method == 'POST':
         # Update athlete stats with form data
         athlete.points_per_game = request.form['points_per_game']
@@ -108,6 +112,7 @@ def edit_athlete(athlete_id):
         athlete.field_goal_percentage = request.form['field_goal_percentage']
         athlete.three_point_percentage = request.form['three_point_percentage']
         athlete.free_throw_percentage = request.form['free_throw_percentage']
+        athlete.team_id = request.form['team_id']
 
         # Commit changes to the database
         db.session.commit()
@@ -119,7 +124,8 @@ def edit_athlete(athlete_id):
             redirect_text = 'Go back to Manage Athletes'
         )
     
-    return render_template('athletes/edit_athlete.html', athlete=athlete)
+    teams = Team.query.all()
+    return render_template('athletes/edit_athlete.html', athlete=athlete, teams=teams)
 
 
 @app.route('/delete_athlete/<int:athlete_id>', methods=['POST'])
@@ -134,6 +140,27 @@ def delete_athlete(athlete_id):
         redirect_url = url_for('manage_athletes'),
         redirect_text = "Go back to Manage Athletes"
     )
+
+
+
+@app.route('/delete_teams/<int:team_id>', methods=['POST'])
+def delete_team(team_id):
+    team = Team.query.get_or_404(team_id)
+   
+    # Set team_id to NULL for all athletese bleonging to the team being deleted
+    Athlete.query.filter_by(team_id=team_id).update({'team_id': None})
+
+    # Delete the team
+    db.session.delete(team)
+    db.session.commit()
+
+    return render_template(
+        'success.html',
+        message="Team Deleted Successfully!",
+        redirect_url = url_for('manage_teams'),
+        redirect_text = "Go back to Manage Teams"
+    )
+
 
 
 

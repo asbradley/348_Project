@@ -77,7 +77,13 @@
                 <td>{{ athlete.name }}</td>
                 <td>{{ athlete.age }}</td>
                 <td>{{ athlete.position }}</td>
-                <td>{{ athlete.team.name }}</td>
+                <td>
+                    {% if athlete.team_id is none %}
+                        Free Agent
+                    {% else %}
+                        {{ athlete.team.name }}
+                    {% endif %}
+                </td>
                 <td>{{ athlete.points_per_game }}</td>
                 <td>{{ athlete.rebounds_per_game }}</td>
                 <td>{{ athlete.assists_per_game }}</td>

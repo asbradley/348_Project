@@ -28,16 +28,11 @@ class Athlete(db.Model):
     team_id = db.Column(db.Integer, db.ForeignKey('team.id'))
     team = db.relationship('Team', backref='athletes')
 
-# Coach
-class Coach(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
-    role = db.Column(db.String(50), default="Head Coach")  # Head Coach, Assistant Coach
-    sport = db.Column(db.String(50))
+    
+    
+    tournament_stats = db.relationship('TournamentAthleteStats', back_populates='athlete')
 
-    # Relationship with Team
-    team_id = db.Column(db.Integer, db.ForeignKey('team.id'))
-    team = db.relationship('Team', backref='coaches')
+   
 
 # Tournament
 class Tournament(db.Model):
@@ -48,6 +43,11 @@ class Tournament(db.Model):
 
     # Relationship with Teams (Many-to-Many)
     teams = db.relationship('Team', secondary='tournament_team', backref='tournaments')
+
+
+    athlete_stats = db.relationship('TournamentAthleteStats', back_populates='tournament')
+
+
 
 # Team
 class Team(db.Model):
@@ -63,6 +63,19 @@ tournament_team = db.Table(
 )
 
 
-
-
+class TournamentAthleteStats(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    tournament_id = db.Column(db.Integer, db.ForeignKey('tournament.id'), nullable=False)
+    athlete_id = db.Column(db.Integer, db.ForeignKey('athlete.id'), nullable=False)
+    
+    # Stats specific to the tournament
+    points_per_game = db.Column(db.Float, default=0.0)
+    rebounds_per_game = db.Column(db.Float, default=0.0)
+    assists_per_game = db.Column(db.Float, default=0.0)
+    blocks_per_game = db.Column(db.Float, default=0.0)
+    steals_per_game = db.Column(db.Float, default=0.0)
+    
+    # Relationships
+    tournament = db.relationship('Tournament', back_populates='athlete_stats')
+    athlete = db.relationship('Athlete', back_populates='tournament_stats')
 

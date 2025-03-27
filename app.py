@@ -16,7 +16,7 @@ db.init_app(app)
 from routes import *
 
 # Import the models after initializing db
-from models import Athlete, Coach, Tournament, Team, tournament_team
+from models import Athlete, Tournament, Team, tournament_team
 
 
 
