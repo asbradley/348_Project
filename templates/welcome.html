@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sports Recruitment System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        .div-container {
+            text-align: center;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #2c3e50;
+        }
+        p {
+            color: #7f8c8d;
+        }
+        .menu-button {
+            display: block;
+            margin: 10px auto;
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .menu-button:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <div class="div-container">
+        <h1>Welcome to the Sports Recruitment System!</h1>
+        <a href="{{ url_for('manage_athletes') }}" class="menu-button">Manage Athletes</a>
+        <a href="{{ url_for('manage_coaches') }}" class="menu-button">Manage Coaches</a>
+        <a href="{{ url_for('manage_teams') }}" class="menu-button">Manage Teams</a>
+        <a href="{{ url_for('manage_tournaments') }}" class="menu-button">Manage Tournaments</a>
+    </div>
+</body>
+</html>
