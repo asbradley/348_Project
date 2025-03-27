@@ -18,9 +18,13 @@ from routes import *
 # Import the models after initializing db
 from models import Athlete, Coach, Tournament, Team, tournament_team
 
+
+
 # Create the database tables within an app context
 with app.app_context():
     db.create_all()
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)

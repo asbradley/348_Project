@@ -1,0 +1,110 @@
+```templates/athletes/add_athlete.html
+```templates/athletes/add_athlete.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Athlete</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .form-container { max-width: 600px; margin: auto; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; }
+        input, select { width: 100%; padding: 8px; }
+        .submit-button { background-color: #3498db; color: white; border: none; padding: 10px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Add Athlete</h1>
+    <div class="form-container">
+        <form action="{{ url_for('add_athlete') }}" method="POST">
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="age">Age:</label>
+                <input type="number" id="age" name="age" required>
+            </div>
+            <div class="form-group">
+                <label for="sport">Sport:</label>
+                <input type="text" id="sport" name="sport" required>
+            </div>
+            <div class="form-group">
+                <label for="height">Height (in cm):</label>
+                <input type="number" step="0.01" id="height" name="height" required>
+            </div>
+            <div class="form-group">
+                <label for="weight">Weight (in kg):</label>
+                <input type="number" step="0.01" id="weight" name="weight" required>
+            </div>
+            <div class="form-group">
+                <label for="gender">Gender:</label>
+                <select id="gender" name="gender" required>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="position">Position:</label>
+                <select id="position" name="position" required>
+                    <option value="PG">Point Guard (PG)</option>
+                    <option value="SG">Shooting Guard (SG)</option>
+                    <option value="SF">Small Forward (SF)</option>
+                    <option value="PF">Power Forward (PF)</option>
+                    <option value="C">Center (C)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="team">Team:</label>
+                <select id="team" name="team_id" required>
+                    
+                    {% for team in teams %}
+                        <option value="{{ team.id }}">{{ team.name }}</option>
+                    {% endfor %}
+
+
+                </select>
+            </div>
+            <!-- Stats Fields -->
+            <div class="form-group">
+                <label for="points_per_game">Points Per Game:</label>
+                <input type="number" step="0.01" id="points_per_game" name="points_per_game" required>
+            </div>
+            <div class="form-group">
+                <label for="rebounds_per_game">Rebounds Per Game:</label>
+                <input type="number" step="0.01" id="rebounds_per_game" name="rebounds_per_game" required>
+            </div>
+            <div class="form-group">
+                <label for="assists_per_game">Assists Per Game:</label>
+                <input type="number" step="0.01" id="assists_per_game" name="assists_per_game" required>
+            </div>
+            <div class="form-group">
+                <label for="blocks_per_game">Blocks Per Game:</label>
+                <input type="number" step="0.01" id="blocks_per_game" name="blocks_per_game" required>
+            </div>
+            <div class="form-group">
+                <label for="steals_per_game">Steals Per Game:</label>
+                <input type="number" step="0.01" id="steals_per_game" name="steals_per_game" required>
+            </div>
+            <!-- Shooting Percentages Fields -->
+            <div class="form-group">
+                <label for="field_goal_percentage">Field Goal Percentage:</label>
+                <input type="number" step="0.01" id="field_goal_percentage" name="field_goal_percentage" required>
+            </div>
+            <div class="form-group">
+                <label for="three_point_percentage">Three Point Percentage:</label>
+                <input type="number" step="0.01" id="three_point_percentage" name="three_point_percentage" required>
+            </div>
+            <div class="form-group">
+                <label for="free_throw_percentage">Free Throw Percentage:</label>
+                <input type="number" step="0.01" id="free_throw_percentage" name="free_throw_percentage" required>
+            </div>
+            <button type="submit" class="submit-button">Add Athlete</button>
+        </form>
+    </div>
+    <a href="{{ url_for('welcome') }}" class="menu-button">Back to Main Menu</a>
+</body>
+</html>

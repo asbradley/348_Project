@@ -1,3 +1,4 @@
+from sqlalchemy import CheckConstraint
 from database_setup import db
 
 # Athlete
@@ -9,7 +10,7 @@ class Athlete(db.Model):
     height = db.Column(db.Float)
     weight = db.Column(db.Float)
     gender = db.Column(db.String(10))
-    position = db.Column(db.String(50))  # e.g., Point Guard
+    position = db.Column(db.String(2), CheckConstraint("position IN ('PG', 'SG', 'SF', 'PF', 'C')"), nullable=False)
 
     # Stats
     points_per_game = db.Column(db.Float, default=0.0)
@@ -51,7 +52,7 @@ class Tournament(db.Model):
 # Team
 class Team(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
+    name = db.Column(db.String(100), nullable=False, unique=True)
     city = db.Column(db.String(100))
 
 # Many-to-Many Table (Teams & Tournaments)
