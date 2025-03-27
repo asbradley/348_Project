@@ -12,7 +12,9 @@ def welcome():
 
 @app.route('/athletes')
 def manage_athletes():
-    return render_template('athletes/manage_athletes.html')
+
+    athletes = Athlete.query.all()
+    return render_template('athletes/manage_athletes.html', athletes=athletes)
 
 
 @app.route('/coaches')
@@ -90,5 +92,54 @@ def add_athlete():
     teams = Team.query.all()
 
     return render_template('athletes/add_athlete.html', teams=teams)
+
+
+@app.route('/edit_athlete/<int:athlete_id>', methods=['GET', 'POST'])
+def edit_athlete(athlete_id):
+    athlete = Athlete.query.get_or_404(athlete_id)
+
+    if request.method == 'POST':
+        # Update athlete stats with form data
+        athlete.points_per_game = request.form['points_per_game']
+        athlete.rebounds_per_game = request.form['rebounds_per_game']
+        athlete.assists_per_game = request.form['assists_per_game']
+        athlete.blocks_per_game = request.form['blocks_per_game']
+        athlete.steals_per_game = request.form['steals_per_game']
+        athlete.field_goal_percentage = request.form['field_goal_percentage']
+        athlete.three_point_percentage = request.form['three_point_percentage']
+        athlete.free_throw_percentage = request.form['free_throw_percentage']
+
+        # Commit changes to the database
+        db.session.commit()
+
+        return render_template(
+            'success.html',
+            message="Athlete Editted successfully!",
+            redirect_url = url_for('manage_athletes'),
+            redirect_text = 'Go back to Manage Athletes'
+        )
+    
+    return render_template('athletes/edit_athlete.html', athlete=athlete)
+
+
+@app.route('/delete_athlete/<int:athlete_id>', methods=['POST'])
+def delete_athlete(athlete_id):
+    athlete = Athlete.query.get_or_404(athlete_id)
+    db.session.delete(athlete)
+    db.session.commit()
+
+    return render_template(
+        'success.html',
+        message="Athlete Deleted Successfully!",
+        redirect_url = url_for('manage_athletes'),
+        redirect_text = "Go back to Manage Athletes"
+    )
+
+
+
+
+
+
+
 
 
