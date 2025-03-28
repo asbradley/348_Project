@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Team</title>
+
+    <style> 
+        body {font-family: Arial, sans-serif; }
+        .form-container {max-width: 600px; margin: auto; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px;}
+        input, select { width: 100%; padding: 8px; }
+        .submit-button { background-color:  #3498db; color: white; border: none; padding: 10px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1> Add Team</h1>
+    <div class="form-container">
+        <form action="{{ url_for('add_team') }}" method="POST">
+            <div>
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div>
+                <label for="city"> City:</label>
+                <input type="text" id="city", name="city" required>
+            </div>
+            <br>
+            <button type="submit" class="submit-button"> Add Team</button>
+        </form>
+    </div>
+    <br>
+    <a href="{{ url_for('manage_teams') }} " class="menu-button"> Back to Manage Teams</a>
+</body>
+</html>

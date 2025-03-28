@@ -91,7 +91,6 @@ def add_athlete():
         )
 
     # Fetch all teams from database
-
     teams = Team.query.all()
 
     return render_template('athletes/add_athlete.html', teams=teams)
@@ -161,6 +160,36 @@ def delete_team(team_id):
         redirect_text = "Go back to Manage Teams"
     )
 
+
+@app.route('/add_team', methods = ['GET', 'POST'])
+def add_team():
+    
+    if request.method == 'POST':
+        name = request.form['name']
+        city = request.form['city']
+
+
+        # Create new team here
+        new_team = Team(
+            name=name,
+            city=city
+        )
+
+        db.session.add(new_team)
+        db.session.commit()
+
+        return render_template(
+            'success.html',
+            message="Team added successfully!",
+            redirect_url = url_for('manage_teams'),
+            redirect_text = 'Go back to Manage Teams'
+        )
+
+
+
+    return render_template('teams/add_team.html')
+
+   
 
 
 

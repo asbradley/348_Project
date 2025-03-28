@@ -19,7 +19,6 @@ from routes import *
 from models import Athlete, Tournament, Team, tournament_team
 
 
-
 # Create the database tables within an app context
 with app.app_context():
     db.create_all()
@@ -29,4 +28,3 @@ if __name__ == "__main__":
     app.run(debug=True)
 
 
-# TODO
