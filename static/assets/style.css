@@ -1,0 +1,25 @@
+body {
+    margin: 0px;
+    padding: 0px;
+}
+
+.top-bar {
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    background-color: rgb(56, 50, 50);
+    height: 50px;
+
+}
+
+.top-text {
+    font-size: 20x;
+    font-family: sans-serif;
+    color: black;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    flex-direction: column;
+    color: white;
+
+}

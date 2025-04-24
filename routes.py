@@ -36,6 +36,11 @@ def manage_tournaments():
     return render_template('tournaments/manage_tournaments.html')
 
 
+@app.route('/reports')
+def reports():
+    return render_template('reports.html')
+
+
 
 @app.route('/add_athlete', methods=['GET', 'POST'])
 def add_athlete():
@@ -127,6 +132,7 @@ def edit_athlete(athlete_id):
     return render_template('athletes/edit_athlete.html', athlete=athlete, teams=teams)
 
 
+
 @app.route('/delete_athlete/<int:athlete_id>', methods=['POST'])
 def delete_athlete(athlete_id):
     athlete = Athlete.query.get_or_404(athlete_id)
@@ -167,12 +173,16 @@ def add_team():
     if request.method == 'POST':
         name = request.form['name']
         city = request.form['city']
+        wins = request.form['wins']
+        losses = request.form['losses']
 
 
         # Create new team here
         new_team = Team(
             name=name,
-            city=city
+            city=city,
+            wins=wins,
+            losses=losses
         )
 
         db.session.add(new_team)
@@ -184,9 +194,7 @@ def add_team():
             redirect_url = url_for('manage_teams'),
             redirect_text = 'Go back to Manage Teams'
         )
-
-
-
+    
     return render_template('teams/add_team.html')
 
    

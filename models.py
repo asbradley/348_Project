@@ -54,6 +54,8 @@ class Team(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False, unique=True)
     city = db.Column(db.String(100))
+    wins = db.Column(db.Integer, default=0)
+    losses = db.Column(db.Integer, default=0)
 
 # Many-to-Many Table (Teams & Tournaments)
 tournament_team = db.Table(
