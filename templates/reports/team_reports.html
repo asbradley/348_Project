@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Teams Report</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .menu-button {
+          display: block;
+          margin: 10px 0;
+          padding: 10px 20px;
+          background-color: #3498db;
+          color: white;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+          text-decoration: none;
+          width: 200px;
+          text-align: center;
+        }
+
+        .action-buttons {
+            display: block;
+            margin: 10px 0;
+            padding: 10px 20px;
+            background-color: #e7e7e7; 
+            color: black;
+            width: 100px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        table {
+            width: 80%;
+            max-width: 800px;
+            border-collapse: collapse;
+            margin: 20px auto;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Teams Report</h1>
+
+    <form method="get">
+        <!-- Team Filter -->
+        <label for="team">Team:</label>
+        <select name="team_id" id="team">
+            <option value="">All Teams</option>
+            {% for team in teams %}
+                <option value="{{ team.id }}" {% if request.args.get('team_id') == team.id|string %} selected {% endif %}>{{ team.name }}</option>
+            {% endfor %}
+        </select><br>
+
+        <!-- Min/Max Wins -->
+        <label for="min_wins">Min Wins:</label>
+        <input type="number" name="min_wins" id="min_wins" value="{{ request.args.get('min_wins', '') }}">
+        <label for="max_wins">Max Wins:</label>
+        <input type="number" name="max_wins" id="max_wins" value="{{ request.args.get('max_wins', '') }}"><br>
+
+        <!-- Min/Max Losses -->
+        <label for="min_losses">Min Losses:</label>
+        <input type="number" name="min_losses" id="min_losses" value="{{ request.args.get('min_losses', '') }}">
+        <label for="max_losses">Max Losses:</label>
+        <input type="number" name="max_losses" id="max_losses" value="{{ request.args.get('max_losses', '') }}"><br>
+
+        <!-- Filter Button -->
+        <button type="submit">Filter</button>
+        <!-- Reset Button -->
+        <a href="{{ url_for('teams_report') }}"><button type="button" class="reset-btn">Reset</button></a>
+    </form>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Team Name</th>
+                <th>City</th>
+                <th>Wins</th>
+                <th>Losses</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for team in filtered_teams %}
+            <tr>
+                <td>{{ team.name }}</td>
+                <td>{{ team.city }}</td>
+                <td>{{ team.wins }}</td>
+                <td>{{ team.losses }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="4">No teams found</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="{{ url_for('reports') }}" class="menu-button">Back to Reports</a>
+
+</body>
+</html>

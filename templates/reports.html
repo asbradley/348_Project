@@ -5,12 +5,79 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='assets/style.css') }}">
     <title>Reports</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .menu-button {
+            display: block;
+            margin: 10px auto;
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            width: 200px;
+            text-align: center;
+        }
+
+        .action-buttons {
+            display: block;
+            margin: 10px auto;
+            padding: 10px 20px;
+            background-color: #e7e7e7; 
+            color: black;
+            width: 100px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        table {
+            width: 80%;
+            max-width: 800px;
+            border-collapse: collapse;
+            margin: 20px auto;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 40px;
+        }
+    </style>
 </head>
 <body>
     
-    <div class="top-bar">
-        <div class="top-text">Report Statistics</div>
-    </div>
 
+
+
+ <!-- templates/reports.html -->
+<h1>Reports Dashboard</h1>
+
+<div class="container">
+    <a class="menu-button" href="{{ url_for('teams_report') }}">Team Report</a>
+    <a class="menu-button" href="{{ url_for('athlete_report') }}">Athlete Report</a>
+    <!-- Add more report links here as needed -->
+
+    <a href="{{ url_for('welcome') }}" class="menu-button">Back to Main Menu</a>
+
+</div>
 </body>
 </html>
+

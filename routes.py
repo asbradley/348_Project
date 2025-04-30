@@ -2,6 +2,7 @@ from flask import redirect, render_template, request, url_for
 from app import app  # Import the app object from app.py
 from models import Athlete, Team
 from database_setup import db
+from sqlalchemy import text
 
 
 # Route for the welcome page
@@ -196,6 +197,135 @@ def add_team():
         )
     
     return render_template('teams/add_team.html')
+
+
+
+from sqlalchemy import text
+
+@app.route('/reports/athletes', methods=['GET', 'POST'])
+def athlete_report():
+    # Fetch all teams for the dropdown
+    teams_result = db.session.execute(text("SELECT * FROM team"))
+    teams = [dict(row._mapping) for row in teams_result]
+
+    # Start raw SQL query with text()
+    sql = text("""
+        SELECT a.* FROM athlete a
+        LEFT JOIN team t ON a.team_id = t.id
+        WHERE 1 = 1
+    """)
+    
+    # Start with a string to build upon
+    sql_str = sql.text
+    params = {}
+
+    # Add filters
+    if request.args.get("min_age"):
+        sql_str += " AND a.age >= :min_age"
+        params["min_age"] = int(request.args["min_age"])
+    if request.args.get("max_age"):
+        sql_str += " AND a.age <= :max_age"
+        params["max_age"] = int(request.args["max_age"])
+    if request.args.get("min_ppg"):
+        sql_str += " AND a.points_per_game >= :min_ppg"
+        params["min_ppg"] = float(request.args["min_ppg"])
+    if request.args.get("max_ppg"):
+        sql_str += " AND a.points_per_game <= :max_ppg"
+        params["max_ppg"] = float(request.args["max_ppg"])
+    if request.args.get("min_rpg"):
+        sql_str += " AND a.rebounds_per_game >= :min_rpg"
+        params["min_rpg"] = float(request.args["min_rpg"])
+    if request.args.get("max_rpg"):
+        sql_str += " AND a.rebounds_per_game <= :max_rpg"
+        params["max_rpg"] = float(request.args["max_rpg"])
+    if request.args.get("min_apg"):
+        sql_str += " AND a.assists_per_game >= :min_apg"
+        params["min_apg"] = float(request.args["min_apg"])
+    if request.args.get("max_apg"):
+        sql_str += " AND a.assists_per_game <= :max_apg"
+        params["max_apg"] = float(request.args["max_apg"])
+    if request.args.get("min_spg"):
+        sql_str += " AND a.steals_per_game >= :min_spg"
+        params["min_spg"] = float(request.args["min_spg"])
+    if request.args.get("max_spg"):
+        sql_str += " AND a.steals_per_game <= :max_spg"
+        params["max_spg"] = float(request.args["max_spg"])
+    if request.args.get("min_ftp"):
+        sql_str += " AND a.free_throw_percentage >= :min_ftp"
+        params["min_ftp"] = float(request.args["min_ftp"])
+    if request.args.get("max_ftp"):
+        sql_str += " AND a.free_throw_percentage <= :max_ftp"
+        params["max_ftp"] = float(request.args["max_ftp"])
+    if request.args.get("min_3pt"):
+        sql_str += " AND a.three_point_percentage >= :min_3pt"
+        params["min_3pt"] = float(request.args["min_3pt"])
+    if request.args.get("max_3pt"):
+        sql_str += " AND a.three_point_percentage <= :max_3pt"
+        params["max_3pt"] = float(request.args["max_3pt"])
+    if request.args.get("position"):
+        sql_str += " AND LOWER(a.position) = LOWER(:position)"
+        params["position"] = request.args["position"]
+    if request.args.get("gender"):
+        sql_str += " AND a.gender = :gender"
+        params["gender"] = request.args["gender"]
+    if request.args.get("team"):
+        sql_str += " AND t.name = :team_name"
+        params["team_name"] = request.args["team"]
+
+    # Wrap final SQL string with text()
+    final_sql = text(sql_str)
+    result = db.session.execute(final_sql, params)
+    athletes = [dict(row._mapping) for row in result]
+
+    return render_template('reports/athlete_report.html', athletes=athletes, teams=teams)
+
+
+
+
+
+
+@app.route('/reports/teams', methods=['GET', 'POST'])
+def teams_report():
+
+
+    # Fetch all teams for the dropdown list
+    teams = Team.query.all()
+
+    # Base SQL query string
+    base_sql = "SELECT * FROM team WHERE 1=1"
+    filters = {}
+    
+    # Dynamically build SQL based on request arguments
+    if request.args.get('team_id'):
+        base_sql += " AND id = :team_id"
+        filters['team_id'] = int(request.args['team_id'])
+
+    if request.args.get('min_wins'):
+        base_sql += " AND wins >= :min_wins"
+        filters['min_wins'] = int(request.args['min_wins'])
+
+    if request.args.get('max_wins'):
+        base_sql += " AND wins <= :max_wins"
+        filters['max_wins'] = int(request.args['max_wins'])
+
+    if request.args.get('min_losses'):
+        base_sql += " AND losses >= :min_losses"
+        filters['min_losses'] = int(request.args['min_losses'])
+
+    if request.args.get('max_losses'):
+        base_sql += " AND losses <= :max_losses"
+        filters['max_losses'] = int(request.args['max_losses'])
+
+
+    # Execute raw SQL with bound parameters
+    result = db.session.execute(text(base_sql), filters)
+    filtered_teams = result.fetchall()
+
+    return render_template('reports/team_reports.html', filtered_teams=filtered_teams, teams=teams)
+
+
+
+
 
    
 
