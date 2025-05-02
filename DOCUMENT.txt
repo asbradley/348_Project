@@ -1,0 +1,42 @@
+Indexing Report:
+
+Athlete Table:
+    Index 1: B+ Tree on 'age'
+        Justification: B+ tree is optimal for range queries like the following used:
+            if request.args.get("min_age"):
+                sql_str += " AND a.age >= :min_age"
+                params["min_age"] = int(request.args["min_age"])
+            if request.args.get("max_age"):
+                sql_str += " AND a.age <= :max_age"
+                params["max_age"] = int(request.args["max_age"])
+
+    Index 2: B+ Tree on 'points_per_game'
+        Justification: B+ tree is optimal for range queries like the following:
+            if request.args.get("min_ppg"):
+                sql_str += " AND a.points_per_game >= :min_ppg"
+                params["min_ppg"] = float(request.args["min_ppg"])
+            if request.args.get("max_ppg"):
+                sql_str += " AND a.points_per_game <= :max_ppg"
+                params["max_ppg"] = float(request.args["max_ppg"])
+
+    Index 3: Hash index on 'position'
+        Justification: Hash index is good for exact match queries like the following:
+                if request.args.get("position"):
+                    sql_str += " AND LOWER(a.position) = LOWER(:position)"
+                    params["position"] = request.args["position"]
+
+
+Team Table:
+    Index 1: Hash on 'name'
+        Justification: Used for exact match filtering
+            if request.args.get("team"):
+                sql_str += " AND t.name = :team_name"
+                params["team_name"] = request.args["team"]
+
+    Index 2: B+ tree on 'id'
+        Justification: Primary key, used for filters and joins
+                if request.args.get('team_id'):
+                    base_sql += " AND id = :team_id"
+                    filters['team_id'] = int(request.args['team_id'])
+                
+                LEFT JOIN team t ON a.team_id = t.id

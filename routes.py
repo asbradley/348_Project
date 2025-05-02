@@ -283,7 +283,6 @@ def athlete_report():
 
 
 
-
 @app.route('/reports/teams', methods=['GET', 'POST'])
 def teams_report():
 
